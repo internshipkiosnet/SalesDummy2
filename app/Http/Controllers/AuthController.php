@@ -13,22 +13,30 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $request->validate([
+        $attrs = $request->validate([
             'username' => 'required',
             'password' => 'required',
         ]);
 
-        $user = User::where('username', $request->username)->first();
+        // $user = User::where('username', $request->username)->first();
         // dd($user);
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+        if (!Auth::attempt($attrs)) {
+            return response([
+                'message' => 'The provided credentials are incorrect'
+            ],403);
         }
 
-        $token = $user->createToken("aaa");
- 
-        return [['token' => $token->plainTextToken],url()];
+        // if (! $user || ! Hash::check($request->password, $user->password)) {
+        //     throw ValidationException::withMessages([
+        //         'email' => ['The provided credentials are incorrect.'],
+        //     ]);
+        // }
+        // $token = $user->createToken("aaa");
+        return response([
+            'user' => auth()->user(),
+            'token' => auth()->user()->createToken("token")->plainTextToken,
+        ],200);
+        // return ['token' => $token->plainTextToken],url()];
         // return $user->createToken("aaa")->plainTextToken;
     }
 
