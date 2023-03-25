@@ -24,19 +24,24 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 // });
 Route::post('/login', [AuthController::class,'login']);
 
+Route::post('/customer/add', [CustomerController::class, 'createCustomer']);
+Route::get('/customer/index/{id}', [CustomerController::class, 'index']);
+
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class,'logout']);
     Route::get('/user/index', [UserController::class,'index']);
     Route::post('/user/change-password', [UserController::class, 'password']);
-    Route::get('/customer/index/{id}', [CustomerController::class, 'index']);
-    Route::post('/customer/add', [CustomerController::class, 'store']);
+    
+    
     Route::put('/customer/close',[CustomerController::class],'close');
     Route::delete('/customer/delete', [CustomerController::class],'destroy');
+
+    
 });
 
-Route::get('/test', function () {
-    dd('test');
-});
+// Route::get('/test', function () {
+//     dd('test');
+// });
 
 Route::post('/tokens/create', function (Request $request) {
     $token = $request->user()->createToken($request->token_name);

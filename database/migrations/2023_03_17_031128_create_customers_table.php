@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('customers', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
             $table->string('sales_id');
             $table->string('area_id')->nullable();
             $table->string('name');
             $table->string('contact');
             $table->string('address')->nullable( );
-            $table->enum('status', ['Q&A','S','Un-cover','Closing']);
+            $table->enum('gender', ['male','female']);
+            $table->enum('status', ['Q&A','Canceled','Uncover','Closing']);
             $table->enum('approach', ['offline','online']);
             $table->timestamps();
             $table->softDeletes();
